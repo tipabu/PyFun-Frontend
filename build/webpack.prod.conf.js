@@ -69,7 +69,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       minify: {
-        removeComments: true,
+        // removeComments: true,
+        removeComments: false, // for host on GitHub pages.
         collapseWhitespace: true,
         removeAttributeQuotes: true
         // more options:

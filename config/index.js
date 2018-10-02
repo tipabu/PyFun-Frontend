@@ -9,7 +9,8 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // assetsPublicPath: '/',
+    assetsPublicPath: './', // for host on GitHub pages.
     proxyTable: {},
 
     // Various Dev Server settings
