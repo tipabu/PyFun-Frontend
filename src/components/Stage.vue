@@ -1,8 +1,14 @@
 <template>
-  <div>
+  <div v-if="title === ''">
+    Loading ... 
+  </div>
+  <div v-else>
     <div id="description">
       <h1>{{ title }}</h1>
-      <img :src="image" v-if="image !== null"/>
+      <div id="image" v-if="image !== null">
+        <img :src="image"/>
+      </div>
+      <br>
       <p v-for="des in description" :key="des">{{ des }}</p>
     </div>
     <div id="field">
@@ -64,13 +70,17 @@ export default {
         method: 'GET',
         url: this.$backend + '/stage/' + this.levelName + '/' + this.stageName
       }).then(response => {
-        this.title = response.data.data.title
-        if (response.data.data.image !== undefined) {
-          this.image = response.data.data.image
+        if (response.data.error !== undefined) {
+          console.log(response.data.error)
+        } else {
+          this.title = response.data.data.title
+          if (response.data.data.image !== undefined) {
+            this.image = response.data.data.image
+          }
+          this.description = response.data.data.description
+          this.code = response.data.data.code
+          this.fields = response.data.data.fields
         }
-        this.description = response.data.data.description
-        this.code = response.data.data.code
-        this.fields = response.data.data.fields
       }).catch(error => {
         console.log(error)
       })
@@ -82,7 +92,7 @@ export default {
         var code = this.code[index]
         var split = code.split(/_____/)
         for (var lineIndex in split) {
-          html += split[lineIndex].replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;')
+          html += split[lineIndex].split(/    /).join('&nbsp;&nbsp;&nbsp;&nbsp;')
           if ((split.length - 1) > lineIndex) {
             html += `<input name="${this.fields[fieldIndex]}" style="text-align: center;border: none;border-bottom: 1px solid #9e9e9e;"/>`
             fieldIndex++

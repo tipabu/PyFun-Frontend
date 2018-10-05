@@ -13,6 +13,7 @@
               <router-link v-for="name in value" :key="name" :to="'/stage/' + key + '/' + convertURL(name)" class="dropdown-item">{{ name }}</router-link>
           </div>
         </li>
+        <router-link to="/about" class="nav-item nav-link">About</router-link>
       </div>
     </div>
   </nav>
@@ -26,17 +27,27 @@ export default {
       stages: {}
     }
   },
+  watch: {
+    $route (to, from) {
+      if (to.name === 'Index') {
+        this.fetchList()
+      }
+    }
+  },
   mounted: function () {
-    this.$ajax({
-      'method': 'GET',
-      'url': this.$backend + '/stage'
-    }).then(response => {
-      this.stages = response.data.data
-    }).catch(error => {
-      console.log(error)
-    })
+    this.fetchList()
   },
   methods: {
+    fetchList: function () {
+      this.$ajax({
+        'method': 'GET',
+        'url': this.$backend + '/stage'
+      }).then(response => {
+        this.stages = response.data.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     convertURL: function (name) {
       return name.replace(/ /g, '_')
     }
